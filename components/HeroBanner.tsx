@@ -1,24 +1,37 @@
 import Link from "next/link";
 import React from "react";
+import { BannerData } from "../types-definition/types";
+import { urlFor } from "../lib/sanity-client";
+import Image from "next/image";
 
-const HeroBanner = () => {
+interface Props {
+  data: BannerData;
+}
+
+const HeroBanner = ({ data }: Props) => {
   return (
-    <section className="hero-banner-container">
+    <div className="hero-banner-container">
       <div>
-        <p className="beats-solo">Small text</p>
-        <h3>Mid text</h3>
-        <img src="" className="hereo-banner-image" alt="headphones" />
+        <p className="beats-solo">{data.smallText}</p>
+        <h3>{data.midText}</h3>
+        <h1>{data.largeText1}</h1>
+        <img
+          src={urlFor(data.image)}
+          alt="headphones"
+          className="hero-banner-image"
+        />
+
         <div>
-          <Link href={"/product/Id"}>
-            <button type="button"> Button text </button>
+          <Link href={`/product/${data.product}`}>
+            <button type="button">{data.buttonText}</button>
           </Link>
           <div className="desc">
             <h5>Description</h5>
-            <p>Description text</p>
+            <p>{data.desc}</p>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
