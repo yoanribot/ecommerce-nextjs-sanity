@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
 
 import { client } from "lib/sanity-client";
-import { HeroBanner, FooterBanner } from "components";
-import { Product, BannerData } from "../types-definition/types";
+import { HeroBanner, FooterBanner, Product } from "components";
+import { Product as TProduct, BannerData } from "../types-definition/types";
 
 interface Props {
-  products: Product[];
+  products: TProduct[];
   bannerData: BannerData[];
 }
 
@@ -14,8 +14,18 @@ const Home: NextPage<Props> = ({ products, bannerData }) => {
   console.log(bannerData);
   return (
     <section>
-      {bannerData?.length > 0 && <HeroBanner data={bannerData[0]} />}
-      <FooterBanner />
+      {bannerData?.length && bannerData[1] && (
+        <HeroBanner data={bannerData[1]} />
+      )}
+
+      <section className="products-container">
+        {products.map((product) => (
+          <Product key={product._id} product={product} />
+        ))}
+      </section>
+      {bannerData?.length && bannerData[0] && (
+        <FooterBanner data={bannerData[0]} />
+      )}
     </section>
   );
 };
