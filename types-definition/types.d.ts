@@ -33,4 +33,6 @@ export interface IAppContext {
   incQty: () => void;
   decQty: () => void;
   onAddProduct: (product: Product, quantity: number) => void;
+  toggleCartItemQuantity: (id: string, op: string) => void;
+  onRemove: (product: Product) => void;
 }

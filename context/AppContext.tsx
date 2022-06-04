@@ -12,6 +12,8 @@ const Context = createContext<IAppContext>({
   incQty: () => {},
   decQty: () => {},
   onAddProduct: () => {},
+  toggleCartItemQuantity: () => {},
+  onRemove: () => {},
 });
 
 interface Props {
@@ -69,6 +71,46 @@ const AppContextProvider = ({ children }: Props) => {
     toast.success(`${currentQty} ${product.name} added to the cart.`);
   };
 
+  const toggleCartItemQuantity = (id: string, op: string) => {
+    const index = cartItems.findIndex((item) => item._id === id);
+    const currentProd = cartItems[index];
+    const restCartItems = cartItems.filter((item) => item._id !== id);
+
+    if (op === "inc") {
+      setCartItems([
+        ...restCartItems,
+        { ...currentProd, quantity: currentProd.quantity + 1 },
+      ]);
+      setTotalPrice((prevTotalPrice) => prevTotalPrice + currentProd.price);
+      setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + 1);
+    } else if (op === "dec") {
+      if (currentProd.quantity > 1) {
+        setCartItems([
+          ...restCartItems,
+          { ...currentProd, quantity: currentProd.quantity - 1 },
+        ]);
+        setTotalPrice((prevTotalPrice) => prevTotalPrice - currentProd.price);
+        setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - 1);
+      }
+    }
+  };
+
+  const onRemove = (product: Product) => {
+    const currentProd = cartItems.find((item) => item._id === product._id);
+    const restCartItems = cartItems.filter((item) => item._id !== product._id);
+
+    if (currentProd) {
+      setTotalPrice(
+        (prevTotalPrice) =>
+          prevTotalPrice - currentProd.price * currentProd.quantity
+      );
+      setTotalQuantities(
+        (prevTotalQuantities) => prevTotalQuantities - currentProd.quantity
+      );
+      setCartItems(restCartItems);
+    }
+  };
+
   return (
     <Context.Provider
       value={{
@@ -81,6 +123,8 @@ const AppContextProvider = ({ children }: Props) => {
         incQty,
         decQty,
         onAddProduct,
+        toggleCartItemQuantity,
+        onRemove,
       }}
     >
       {children}
