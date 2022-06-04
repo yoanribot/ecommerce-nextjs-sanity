@@ -7,6 +7,7 @@ export type Product = {
   image: string[];
   price: number;
   details: string;
+  quantity: number;
 };
 
 export type BannerData = {
@@ -21,3 +22,15 @@ export type BannerData = {
   discount: string;
   saleTime: string;
 };
+
+export interface IAppContext {
+  showCart: boolean;
+  cartItems: Product[];
+  totalPrice: number;
+  totalQuantities: number;
+  currentQty: number;
+  setShowCart: Dispatch<SetStateAction<boolean>>;
+  incQty: () => void;
+  decQty: () => void;
+  onAddProduct: (product: Product, quantity: number) => void;
+}

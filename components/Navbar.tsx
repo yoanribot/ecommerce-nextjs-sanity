@@ -2,11 +2,11 @@ import React from "react";
 import Link from "next/link";
 import { AiOutlineShopping } from "react-icons/ai";
 
-import { Cart } from "./";
-// import { useStateContext} from '../context/StateContext';
+import { Cart } from "components";
+import { useAppContext } from "../context/AppContext";
 
 const Navbar = () => {
-  // const { showCart, setShowCart, totalQuantities } = useStateContext();
+  const { showCart, setShowCart, totalQuantities } = useAppContext();
 
   return (
     <div className="navbar-container">
@@ -23,7 +23,7 @@ const Navbar = () => {
         <span className="cart-item-qty">1</span>
       </button>
 
-      {/* {showCart && <Cart />} */}
+      {showCart && <Cart />}
     </div>
   );
 };

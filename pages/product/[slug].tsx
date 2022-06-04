@@ -9,7 +9,7 @@ import {
 import { client, urlFor } from "lib/sanity-client";
 import { Product } from "../../components";
 import { Product as TProduct } from "types-definition/types";
-// import { useStateContext } from '../../context/StateContext';
+import { useAppContext } from "../../context/AppContext";
 
 interface Props {
   product: TProduct;
@@ -19,11 +19,12 @@ interface Props {
 const ProductDetails = ({ product, products }: Props) => {
   const { image, name, details, price } = product;
   const [index, setIndex] = useState(0);
-  // const { decQty, incQty, qty, onAdd, setShowCart } = useStateContext();
+  const { decQty, incQty, currentQty, setShowCart, onAddProduct } =
+    useAppContext();
 
   const handleBuyNow = () => {
-    // onAdd(product, qty);
-    // setShowCart(true);
+    onAddProduct(product, currentQty);
+    setShowCart(true);
   };
 
   return (
@@ -65,23 +66,23 @@ const ProductDetails = ({ product, products }: Props) => {
           <h4>Details: </h4>
           <p>{details}</p>
           <p className="price">${price}</p>
-          {/* <div className="quantity">
+          <div className="quantity">
             <h3>Quantity:</h3>
             <p className="quantity-desc">
               <span className="minus" onClick={decQty}>
                 <AiOutlineMinus />
               </span>
-              <span className="num">{qty}</span>
+              <span className="num">{currentQty}</span>
               <span className="plus" onClick={incQty}>
                 <AiOutlinePlus />
               </span>
             </p>
-          </div> */}
+          </div>
           <div className="buttons">
             <button
               type="button"
               className="add-to-cart"
-              // onClick={() => onAdd(product, qty)}
+              onClick={() => onAddProduct(product, currentQty)}
             >
               Add to Cart
             </button>
