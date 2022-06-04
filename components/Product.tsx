@@ -15,7 +15,7 @@ const Product = ({ product: { image, name, slug, price } }: Props) => {
         <div className="product-card">
           {image.length && (
             <img
-              src={urlFor(image[0])}
+              src={urlFor(image[0]).toString()}
               width={250}
               height={250}
               className="product-image"
