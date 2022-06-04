@@ -74,21 +74,23 @@ const AppContextProvider = ({ children }: Props) => {
   const toggleCartItemQuantity = (id: string, op: string) => {
     const index = cartItems.findIndex((item) => item._id === id);
     const currentProd = cartItems[index];
-    const restCartItems = cartItems.filter((item) => item._id !== id);
+    const newCartItems = [...cartItems];
 
     if (op === "inc") {
-      setCartItems([
-        ...restCartItems,
-        { ...currentProd, quantity: currentProd.quantity + 1 },
-      ]);
+      newCartItems[index] = {
+        ...currentProd,
+        quantity: currentProd.quantity + 1,
+      };
+      setCartItems(newCartItems);
       setTotalPrice((prevTotalPrice) => prevTotalPrice + currentProd.price);
       setTotalQuantities((prevTotalQuantities) => prevTotalQuantities + 1);
     } else if (op === "dec") {
       if (currentProd.quantity > 1) {
-        setCartItems([
-          ...restCartItems,
-          { ...currentProd, quantity: currentProd.quantity - 1 },
-        ]);
+        newCartItems[index] = {
+          ...currentProd,
+          quantity: currentProd.quantity - 1,
+        };
+        setCartItems(newCartItems);
         setTotalPrice((prevTotalPrice) => prevTotalPrice - currentProd.price);
         setTotalQuantities((prevTotalQuantities) => prevTotalQuantities - 1);
       }
