@@ -40,7 +40,6 @@ const AppContextProvider = ({ children }: Props) => {
   };
 
   const onAddProduct = (product: Product, quantity: number) => {
-    console.log("onAddProduct ....");
     const checkProductInCart = cartItems.find(
       (item) => item._id === product._id
     );

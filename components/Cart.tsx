@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 
 import { useAppContext } from "../context/AppContext";
 import { urlFor } from "lib/sanity-client";
-import getStripe from "lib/stripe";
+import getStripe from "lib/getStripeService";
 
 const Cart = () => {
   const cartRef = useRef(null);
@@ -25,23 +25,24 @@ const Cart = () => {
     onRemove,
   } = useAppContext();
 
-  const handleCheckout = async () => {
+  const handlePayment = async () => {
     const stripe = await getStripe();
+    const params = {
+      cartItems,
+    };
 
     const response = await fetch("/api/stripe", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(cartItems),
+      body: JSON.stringify(params),
     });
 
-    if (response.statusCode === 500) return;
+    if (response.status === 500) return;
 
     const data = await response.json();
-
     toast.loading("Redirecting...");
-
     stripe.redirectToCheckout({ sessionId: data.id });
   };
 
@@ -129,7 +130,7 @@ const Cart = () => {
               <h3>${totalPrice}</h3>
             </div>
             <div className="btn-container">
-              <button type="button" className="btn" onClick={handleCheckout}>
+              <button type="button" className="btn" onClick={handlePayment}>
                 Pay with Stripe
               </button>
             </div>

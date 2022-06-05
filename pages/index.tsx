@@ -10,8 +10,6 @@ interface Props {
 }
 
 const Home: NextPage<Props> = ({ products, bannerData }) => {
-  console.log(products);
-  console.log(bannerData);
   return (
     <section>
       {bannerData?.length && bannerData[1] && (
