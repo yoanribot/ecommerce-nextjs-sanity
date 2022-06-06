@@ -4,6 +4,32 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
 
+const formatCartItemsForStripe = items => items.map((item) => {
+  const img = item.image[0].asset._ref;
+  const newImage = img
+    .replace(
+      "image-",
+      `https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/production/`
+    )
+    .replace("-webp", ".webp");
+
+  return {
+    price_data: {
+      currency: "eur",
+      product_data: {
+        name: item.name,
+        images: [newImage],
+      },
+      unit_amount: item.price * 100,
+    },
+    adjustable_quantity: {
+      enabled: true,
+      minimum: 1,
+    },
+    quantity: item.quantity,
+  };
+});
+
 export default async function handler(
   req,
   res
@@ -22,31 +48,7 @@ export default async function handler(
           { shipping_rate: "shr_1L7Q4xI1ORSKu4Ml5Zlg21Qp" }, // FREE SHIPPING
           { shipping_rate: "shr_1L7Q5RI1ORSKu4MlbPaDLX8b" }, // FAST SHIPPING
         ],
-        line_items: req.body.cartItems.map((item) => {
-          const img = item.image[0].asset._ref;
-          const newImage = img
-            .replace(
-              "image-",
-              "https://cdn.sanity.io/images/ji4oo4i4/production/"
-            )
-            .replace("-webp", ".webp");
-
-          return {
-            price_data: {
-              currency: "eur",
-              product_data: {
-                name: item.name,
-                images: [newImage],
-              },
-              unit_amount: item.price * 100,
-            },
-            adjustable_quantity: {
-              enabled: true,
-              minimum: 1,
-            },
-            quantity: item.quantity,
-          };
-        }),
+        line_items: formatCartItemsForStripe(req.body.cartItems),
         success_url: `${req.headers.origin}/success`,
         cancel_url: `${req.headers.origin}/canceled`,
       };

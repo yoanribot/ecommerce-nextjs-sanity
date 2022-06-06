@@ -14,6 +14,9 @@ const Context = createContext<IAppContext>({
   onAddProduct: () => {},
   toggleCartItemQuantity: () => {},
   onRemove: () => {},
+  setCartItems: () => {},
+  setTotalPrice: () => {},
+  setTotalQuantities: () => {},
 });
 
 interface Props {
@@ -126,6 +129,9 @@ const AppContextProvider = ({ children }: Props) => {
         onAddProduct,
         toggleCartItemQuantity,
         onRemove,
+        setCartItems,
+        setTotalPrice,
+        setTotalQuantities,
       }}
     >
       {children}

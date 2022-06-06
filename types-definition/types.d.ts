@@ -39,4 +39,7 @@ export interface IAppContext {
   onAddProduct: (product: Product, quantity: number) => void;
   toggleCartItemQuantity: (id: string, op: string) => void;
   onRemove: (product: Product) => void;
+  setCartItems: (items: Product[]) => void;
+  setTotalPrice: (n: number) => void;
+  setTotalQuantities: (n: number) => void;
 }
